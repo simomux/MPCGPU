@@ -9,7 +9,7 @@ TODO: add to the module the custom solver from [KittJr](https://git.hipert.unimo
 To download and build the source code:
 
 ```bash
-git clone --recursive https://git.hipert.unimore.it/fmuzzini/mpc-gpu.git
+git clone --recursive https://github.com/simomux/MPCGPU.git
 make pcg
 ```
 
