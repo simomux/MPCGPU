@@ -2,18 +2,28 @@
 
 # Compiler and compiler flags
 NVCC = nvcc
-CFLAGS = --compiler-options -Wall  -O3 -Iinclude -Iinclude/common -IGLASS  -IGBD-PCG/include  -lqdldl  -Iqdldl/include -Lqdldl/build/out -lcublas
+QDLDL-FLAGS = --compiler-options -Wall  -O2 -Iinclude -Iinclude/common -IGBD-PCG/GLASS -IGBD-PCG/include  -lqdldl  -Iqdldl/include -Lqdldl/build/out -lcublas
+PCG-FLAGS = --compiler-options -Wall -O2 -Iinclude -Iinclude/common -IGBD-PCG/GLASS -IGBD-PCG/include -lcublas
+
+examples: pcg qdldl
 
 
-examples: examples/pcg.exe examples/qdldl.exe
+create_dir:
+	mkdir -p tmp/results
 
-examples/pcg.exe:
-	$(NVCC) $(CFLAGS) examples/track_iiwa_pcg.cu -o examples/pcg.exe
-examples/qdldl.exe:
-	$(NVCC) $(CFLAGS) -DLINSYS_SOLVE=0 examples/track_iiwa_qdldl.cu -o examples/qdldl.exe
+pcg: create_dir
+	$(NVCC) $(PCG-FLAGS) examples/track_iiwa_pcg.cu -o examples/pcg.exe
+
 
 build_qdldl:
-	cd qdldl && mkdir -p build && cd build && cmake -DQDLDL_FLOAT=true -DQDLDL_LONG=false .. && cmake --build . && cd ../../
+	cd qdldl && mkdir -p build && cd build && cmake -DQDLDL_FLOAT=true -DQDLDL_LONG=false .. && cmake --build .
+	
+install_qdldl: build_qdldl
+	cd qdldl/build && sudo make install
+
+qdldl: create_dir install_qdldl
+	 $(NVCC) $(QDLDL-FLAGS) -DLINSYS_SOLVE=0 examples/track_iiwa_qdldl.cu -o examples/qdldl.exe
+
 
 clean:
-	rm -f examples/*.exe
+	rm -f examples/*.exe && rm -f tmp/results/*

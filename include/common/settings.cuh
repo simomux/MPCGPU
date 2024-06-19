@@ -163,7 +163,7 @@ LINSYS_SOLVE = 0 uses qdldl as the underlying linear system solver */
 #endif
 
 #ifndef SCHUR_THREADS
-#define SCHUR_THREADS       128
+#define SCHUR_THREADS       64 // 128 is default but jetson maxes out at 64
 #endif 
 
 #ifndef DZ_THREADS
