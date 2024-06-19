@@ -23,7 +23,3 @@ To run:
 
 You can set a bunch of parameters in `include/common/settings.cuh`. You can also modify these by passing them as
 compiler flags. This will overwrite the default values set for these parameters.
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
